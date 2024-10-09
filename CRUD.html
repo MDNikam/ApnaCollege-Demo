@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Operations Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .crud-btn {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .crud-btn.delete {
+            background-color: red;
+        }
+
+        .crud-btn.update {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>CRUD Operations Example</h2>
+
+    <form id="crudForm">
+        <input type="text" id="name" placeholder="Enter name" required>
+        <input type="number" id="age" placeholder="Enter age" required>
+        <button type="button" class="crud-btn create" onclick="createItem()">Create</button>
+    </form>
+
+    <h3>List of Items</h3>
+    <table id="crudTable">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+
+    <script>
+        let items = [];
+
+        function createItem() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            if (name && age) {
+                items.push({ name, age });
+                document.getElementById('name').value = '';
+                document.getElementById('age').value = '';
+                renderTable();
+            }
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            renderTable();
+        }
+
+        function updateItem(index) {
+            const name = prompt('Enter new name', items[index].name);
+            const age = prompt('Enter new age', items[index].age);
+            if (name && age) {
+                items[index] = { name, age };
+                renderTable();
+            }
+        }
+
+        function renderTable() {
+            const table = document.getElementById('crudTable');
+            table.innerHTML = `
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Actions</th>
+                </tr>
+            `;
+            items.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.age}</td>
+                        <td>
+                            <button class="crud-btn update" onclick="updateItem(${index})">Update</button>
+                            <button class="crud-btn delete" onclick="deleteItem(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                table.innerHTML += row;
+            });
+        }
+    </script>
+
+</body>
+</html>
